@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "خدمني | Khadimni"
+version = "1.0.0"
+id = "artifacts/khadimni"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21123
+
+[services.development]
+run = "pnpm --filter @workspace/khadimni run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/khadimni", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/khadimni/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21123"
+BASE_PATH = "/"

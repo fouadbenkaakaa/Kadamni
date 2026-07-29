@@ -1,0 +1,291 @@
+:root {
+  --bg: #F3FBF4;
+  --card: #FFFFFF;
+  --primary: #1FAA59;
+  --primaryDark: #128A45;
+  --primarySoft: #E4F8EA;
+  --primarySofter: #EFFBF2;
+  --text: #12261B;
+  --sub: #6B8A78;
+  --border: #DCEFE1;
+  --amber: #F5A623;
+  --danger: #EF4444;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Segoe UI", "Tahoma", sans-serif;
+  background: #0B1712;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+#phone {
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  max-height: 900px;
+  background: var(--bg);
+  border-radius: 28px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+}
+
+.app-outer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 56px;
+  flex-shrink: 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.icon-btn:active {
+  background: rgba(0, 0, 0, .05);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 16px;
+  padding: 0 14px;
+  height: 48px;
+  background: var(--primarySofter);
+  border: 1px solid var(--border);
+}
+
+.field input,
+.field select {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 13.5px;
+  color: var(--text);
+  width: 100%;
+}
+
+.btn {
+  height: 48px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: opacity .15s;
+}
+
+.btn:active {
+  opacity: .8;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+
+.btn-ghost {
+  background: var(--primarySoft);
+  color: var(--primaryDark);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  height: 32px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.bottomnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: 64px;
+  flex-shrink: 0;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+}
+
+.navitem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 56px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.navitem span {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar-wrap img {
+  border-radius: 9999px;
+  object-fit: cover;
+  display: block;
+}
+
+.avail-dot {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  background: #22C55E;
+}
+
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, .4);
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 24px 24px 0 0;
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  max-height: 85%;
+}
+
+.fade-in {
+  animation: fadeIn .18s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  accent-color: var(--primary);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+}
+
+.toggle {
+  width: 40px;
+  height: 24px;
+  border-radius: 9999px;
+  position: relative;
+  border: none;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.toggle span {
+  position: absolute;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  transition: .2s;
+}
