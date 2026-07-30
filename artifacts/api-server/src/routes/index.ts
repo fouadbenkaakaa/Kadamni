@@ -5,6 +5,8 @@ import jobsRouter from "./jobs";
 import workersRouter from "./workers";
 import servicesRouter from "./services";
 import favoritesRouter from "./favorites";
+import conversationsRouter from "./conversations";
+import notificationsRouter from "./notifications";
 
 const router: IRouter = Router();
 
@@ -14,5 +16,7 @@ router.use(jobsRouter);
 router.use(workersRouter);
 router.use(servicesRouter);
 router.use(favoritesRouter);
+router.use(conversationsRouter);
+router.use(notificationsRouter);
 
 export default router;
