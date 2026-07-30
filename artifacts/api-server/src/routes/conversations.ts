@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { and, desc, eq, or } from "drizzle-orm";
+import { and, desc, eq, ne, or } from "drizzle-orm";
 import {
   db,
   conversationsTable,
@@ -123,13 +123,9 @@ router.get("/conversations/:id/messages", async (req, res) => {
     return;
   }
 
-  const messages = await db
-    .select()
-    .from(messagesTable)
-    .where(eq(messagesTable.conversationId, req.params.id))
-    .orderBy(messagesTable.createdAt);
-
-  // Mark incoming messages as read now that the user has fetched them.
+  // Mark the other participant's messages as read *before* selecting, so
+  // the response the caller sees already reflects the final state — and
+  // only their incoming messages, never the current user's own sent ones.
   await db
     .update(messagesTable)
     .set({ read: true })
@@ -137,8 +133,15 @@ router.get("/conversations/:id/messages", async (req, res) => {
       and(
         eq(messagesTable.conversationId, req.params.id),
         eq(messagesTable.read, false),
+        ne(messagesTable.senderId, me),
       ),
     );
+
+  const messages = await db
+    .select()
+    .from(messagesTable)
+    .where(eq(messagesTable.conversationId, req.params.id))
+    .orderBy(messagesTable.createdAt);
 
   res.json({ messages });
 });
