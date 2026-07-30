@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Registration, login, and session management
 paths:
   /healthz:
     get:
@@ -24,6 +26,89 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Create a new account
+      description: Registers a new user and starts a session (sets a session cookie).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "409":
+          description: Email or phone already registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Log in
+      description: Authenticates with email/phone + password and starts a session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Log out
+      description: Clears the current session.
+      responses:
+        "204":
+          description: Logged out
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get the currently logged-in user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Not logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +118,135 @@ components:
           type: string
       required:
         - status
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+    AccountType:
+      type: string
+      enum: [seeker, employer, worker]
+    User:
+      type: object
+      description: Public-safe user profile (never includes the password hash).
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        accountType:
+          $ref: "#/components/schemas/AccountType"
+        email:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        avatarUrl:
+          type: string
+          nullable: true
+        coverUrl:
+          type: string
+          nullable: true
+        age:
+          type: integer
+          nullable: true
+        gender:
+          type: string
+          enum: [male, female]
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        profession:
+          type: string
+          nullable: true
+        bio:
+          type: string
+          nullable: true
+        experienceYears:
+          type: integer
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        languages:
+          type: array
+          items:
+            type: string
+          nullable: true
+        availableNow:
+          type: boolean
+        phoneVerified:
+          type: boolean
+        emailVerified:
+          type: boolean
+        identityVerified:
+          type: boolean
+        ratingAverage:
+          type: string
+        ratingCount:
+          type: integer
+        completedJobsCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - fullName
+        - accountType
+        - availableNow
+        - phoneVerified
+        - emailVerified
+        - identityVerified
+        - ratingAverage
+        - ratingCount
+        - completedJobsCount
+        - createdAt
+    RegisterRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+          minLength: 2
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        password:
+          type: string
+          minLength: 8
+        accountType:
+          $ref: "#/components/schemas/AccountType"
+        city:
+          type: string
+      required:
+        - fullName
+        - password
+        - accountType
+    LoginRequest:
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: Email or phone number
+        password:
+          type: string
+      required:
+        - identifier
+        - password
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+      required:
+        - user
 

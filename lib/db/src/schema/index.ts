@@ -1,5 +1,6 @@
 // Export your models here. One export per file.
 export * from "./users";
+export * from "./sessions";
 export * from "./jobs";
 export * from "./services";
 export * from "./favorites";
