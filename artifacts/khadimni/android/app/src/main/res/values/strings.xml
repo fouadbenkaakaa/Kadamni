@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">خدمني</string>
+    <string name="title_activity_main">خدمني</string>
+    <string name="package_name">com.khadimni.app</string>
+    <string name="custom_url_scheme">com.khadimni.app</string>
+</resources>

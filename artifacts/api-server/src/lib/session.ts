@@ -28,17 +28,23 @@ export function setSessionCookie(
   token: string,
   expiresAt: Date,
 ) {
+  const isProd = process.env.NODE_ENV === "production";
   res.cookie(SESSION_COOKIE, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
     expires: expiresAt,
     path: "/",
   });
 }
 
 export function clearSessionCookie(res: Response) {
-  res.clearCookie(SESSION_COOKIE, { path: "/" });
+  const isProd = process.env.NODE_ENV === "production";
+  res.clearCookie(SESSION_COOKIE, {
+    path: "/",
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+  });
 }
 
 // Resolves the logged-in user for a request, or null if not authenticated /

@@ -14,7 +14,7 @@
    ============================================================ */
 
 /* ---------------------------- API ---------------------------- */
-var API_BASE = "/api";
+var API_BASE = (typeof window !== "undefined" && window.__KHADIMNI_API_BASE__) || "/api";
 
 function apiFetch(path, options) {
   options = options || {};

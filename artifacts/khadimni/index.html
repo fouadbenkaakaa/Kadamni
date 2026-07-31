@@ -27,6 +27,17 @@
   </div>
 </div>
 
+<!--
+  Mobile API override — Capacitor / native build only.
+  When packaging with Capacitor, uncomment the line below and set it to
+  the deployed API URL (e.g. https://your-app.replit.app) so the bundled
+  WebView talks to the live server instead of the relative /api path.
+  Leave this block as-is (commented out) for the normal web / dev build.
+-->
+<script>
+  // window.__KHADIMNI_API_BASE__ = "https://your-app.replit.app/api";
+</script>
+
 <!-- App logic -->
 <script src="./script.js"></script>
 
