@@ -25,7 +25,7 @@ jobs:
           corepack prepare pnpm@latest --activate
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --config.strict-dep-builds=false
 
       - name: Build web app
         run: pnpm --filter @workspace/khadimni run build
