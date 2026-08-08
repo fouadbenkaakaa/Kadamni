@@ -12,6 +12,7 @@ import ratingsRouter from "./ratings";
 import nearbyRouter from "./nearby";
 import activityRouter from "./activity";
 import aiRouter from "./ai";
+import applicationsRouter from "./applications";
 
 const router: IRouter = Router();
 
@@ -28,5 +29,6 @@ router.use(ratingsRouter);
 router.use(nearbyRouter);
 router.use(activityRouter);
 router.use(aiRouter);
+router.use(applicationsRouter);
 
 export default router;
