@@ -15,7 +15,7 @@ router.get("/activity", async (req, res) => {
   const [ratingsReceived] = await db.select({ value: count() }).from(ratingsTable).where(eq(ratingsTable.targetUserId, me));
   const [applicationsSent] = await db.select({ value: count() }).from(jobApplicationsTable).where(eq(jobApplicationsTable.applicantId, me));
   const [messagesSent] = await db.select({ value: count() }).from(messagesTable).where(eq(messagesTable.senderId, me));
-  const [messagesReceived] = await db.select({ value: count() }).from(messagesTable)
+  const [incomingMessages] = await db.select({ value: count() }).from(messagesTable)
     .innerJoin(conversationsTable, eq(messagesTable.conversationId, conversationsTable.id))
     .where(and(or(eq(conversationsTable.participantOneId, me), eq(conversationsTable.participantTwoId, me)), ne(messagesTable.senderId, me)));
 
@@ -31,7 +31,7 @@ router.get("/activity", async (req, res) => {
       ratingsReceived: Number(ratingsReceived?.value || 0),
       applicationsSent: Number(applicationsSent?.value || 0),
       messagesSent: Number(messagesSent?.value || 0),
-      messagesReceived: Number(messagesReceived?.[0]?.value || 0),
+      messagesReceived: Number(incomingMessages?.value || 0),
     },
     recentJobs,
     recentServices,
