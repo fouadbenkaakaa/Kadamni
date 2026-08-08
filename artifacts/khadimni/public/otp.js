@@ -1,1 +1,1 @@
-console.log("Khadimni OTP module loaded");
+window.KHADIMNI_OTP_READY = true;
