@@ -12,34 +12,20 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="خدمني | Khadimni" />
   <meta name="twitter:description" content="خدمني — منصة ذكية للبحث عن عمل أو العثور على العمال والحرفيين بسرعة وسهولة" />
-  <!-- Tailwind (utility classes, JIT compiles at runtime) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide icons — must load before script.js -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-  <!-- App styles -->
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
-
 <div class="app-outer">
   <div id="phone">
     <div id="screen-root" class="screen"></div>
   </div>
 </div>
-
-<!--
-  Mobile API override — Capacitor / native build only.
-  When packaging with Capacitor, uncomment the line below and set it to
-  the deployed API URL (e.g. https://your-app.replit.app) so the bundled
-  WebView talks to the live server instead of the relative /api path.
-  Leave this block as-is (commented out) for the normal web / dev build.
--->
 <script>
   window.__KHADIMNI_API_BASE__ = "https://web-app-builder--fatimaarij.replit.app/api";
 </script>
-
-<!-- App logic -->
 <script src="/script.js"></script>
-
+<script src="/otp.js"></script>
 </body>
 </html>
