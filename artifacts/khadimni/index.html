@@ -27,13 +27,19 @@
 <script src="/script.js"></script>
 <script src="/otp.js"></script>
 <script src="/profile-search.js"></script>
+<script src="/fixes.js"></script>
 <script>
-  // profile-search.js exports its overrides on window. Register them after loading.
   if (typeof SCREENS !== "undefined") {
     if (typeof window.screenEditProfile === "function") SCREENS["edit-profile"] = window.screenEditProfile;
     if (typeof window.screenProfile === "function") SCREENS["profile"] = window.screenProfile;
     if (typeof window.screenSearch === "function") SCREENS["search"] = window.screenSearch;
+    if (typeof window.screenNearby === "function") SCREENS["nearby"] = window.screenNearby;
+    if (typeof window.screenActivity === "function") SCREENS["activity"] = window.screenActivity;
+    if (typeof window.screenRatings === "function") SCREENS["ratings"] = window.screenRatings;
+    if (typeof window.screenSettings === "function") SCREENS["settings"] = window.screenSettings;
+    if (typeof window.screenNotifications === "function") SCREENS["notifications"] = window.screenNotifications;
   }
+  if (typeof render === "function") render();
 </script>
 </body>
 </html>
