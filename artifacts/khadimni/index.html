@@ -22,15 +22,13 @@
     <div id="screen-root" class="screen"></div>
   </div>
 </div>
-<script>
-  window.__KHADIMNI_API_BASE__ = "https://web-app-builder--fatimaarij.replit.app/api";
-</script>
+<!-- Production API override for Capacitor/Android only; keep disabled for normal web/Replit development. -->
+<!-- window.__KHADIMNI_API_BASE__ = "https://web-app-builder--fatimaarij.replit.app/api"; -->
 <script src="/script.js"></script>
 <script src="/otp.js"></script>
 <script src="/profile-search.js"></script>
 <script>
-  // profile-search.js intentionally exports its overrides on window.
-  // Register those overrides after both scripts have loaded.
+  // profile-search.js exports its overrides on window. Register them after loading.
   if (typeof SCREENS !== "undefined") {
     if (typeof window.screenEditProfile === "function") SCREENS["edit-profile"] = window.screenEditProfile;
     if (typeof window.screenProfile === "function") SCREENS["profile"] = window.screenProfile;
