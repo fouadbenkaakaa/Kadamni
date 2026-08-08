@@ -20,8 +20,9 @@ router.get("/jobs", async (req, res) => {
 });
 
 router.get("/jobs/:id", async (req, res) => {
-  const rawId = req.params.id;
-  const id: string = Array.isArray(rawId) ? rawId[0] : rawId;
+  // Express can expose route params as string|string[] depending on the installed typings.
+  // Normalizing explicitly keeps the Drizzle UUID comparison strongly typed.
+  const id = String(req.params.id ?? "");
   if (!id) {
     res.status(400).json({ error: "معرّف الوظيفة غير صالح" });
     return;
@@ -44,8 +45,8 @@ router.post("/jobs", requireAuth, async (req, res) => {
 });
 
 router.patch("/jobs/:id", requireAuth, async (req, res) => {
-  const rawId = req.params.id;
-  const id: string = Array.isArray(rawId) ? rawId[0] : rawId;
+  // Normalize the route parameter before passing it to Drizzle's typed eq() helper.
+  const id = String(req.params.id ?? "");
   if (!id) {
     res.status(400).json({ error: "معرّف الوظيفة غير صالح" });
     return;
