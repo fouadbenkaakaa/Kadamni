@@ -28,6 +28,7 @@
 <script src="/otp.js"></script>
 <script src="/profile-search.js"></script>
 <script src="/fixes.js"></script>
+<script src="/features2.js"></script>
 <script>
   if (typeof SCREENS !== "undefined") {
     if (typeof window.screenEditProfile === "function") SCREENS["edit-profile"] = window.screenEditProfile;
@@ -38,6 +39,9 @@
     if (typeof window.screenRatings === "function") SCREENS["ratings"] = window.screenRatings;
     if (typeof window.screenSettings === "function") SCREENS["settings"] = window.screenSettings;
     if (typeof window.screenNotifications === "function") SCREENS["notifications"] = window.screenNotifications;
+    if (typeof window.screenJobDetails === "function") SCREENS["job-details"] = window.screenJobDetails;
+    if (typeof window.screenChat === "function") SCREENS["chat"] = window.screenChat;
+    if (typeof window.screenCall === "function") SCREENS["call"] = window.screenCall;
   }
   if (typeof render === "function") render();
 </script>
