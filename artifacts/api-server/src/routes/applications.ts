@@ -6,6 +6,7 @@ import { toPublicUser } from "../lib/public-user";
 
 const router: IRouter = Router();
 router.use(requireAuth);
+type ApplicationStatus = "pending" | "accepted" | "rejected";
 
 router.post("/jobs/:jobId/applications", async (req, res) => {
   const jobId = req.params.jobId;
@@ -30,8 +31,9 @@ router.get("/jobs/:jobId/applications", async (req, res) => {
 });
 
 router.patch("/applications/:id", async (req, res) => {
-  const status = req.body?.status;
-  if (!["pending", "accepted", "rejected"].includes(status)) { res.status(400).json({ error: "حالة الطلب غير صالحة" }); return; }
+  const rawStatus = req.body?.status;
+  if (!["pending", "accepted", "rejected"].includes(rawStatus)) { res.status(400).json({ error: "حالة الطلب غير صالحة" }); return; }
+  const status = rawStatus as ApplicationStatus;
   const [row] = await db.select({ application: jobApplicationsTable, employerId: jobsTable.employerId }).from(jobApplicationsTable)
     .innerJoin(jobsTable, eq(jobApplicationsTable.jobId, jobsTable.id)).where(eq(jobApplicationsTable.id, req.params.id)).limit(1);
   if (!row || row.employerId !== req.user!.id) { res.status(403).json({ error: "غير مصرح" }); return; }
