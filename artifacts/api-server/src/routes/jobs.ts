@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { and, desc, eq, ilike, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, sql, type SQL } from "drizzle-orm";
 import { db, jobsTable, usersTable, insertJobSchema } from "@workspace/db";
 import { requireAuth } from "../middlewares/auth";
 import { toPublicUser } from "../lib/public-user";
@@ -10,7 +10,7 @@ router.get("/jobs", async (req, res) => {
   const { city, jobType } = req.query as { city?: string; jobType?: string };
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
-  const conditions = [eq(jobsTable.status, "open")];
+  const conditions: SQL[] = [eq(jobsTable.status, "open")];
   if (city) conditions.push(ilike(jobsTable.city, `%${city}%`));
   if (jobType) conditions.push(eq(jobsTable.jobType, jobType as "full_time" | "part_time" | "freelance" | "remote"));
   const rows = await db.select({ job: jobsTable, employer: usersTable }).from(jobsTable)
