@@ -22,7 +22,25 @@ jobs:
       - name: Install dependencies
         run: pnpm install --config.strict-dep-builds=false
       - name: Typecheck workspace
-        run: pnpm typecheck
+        id: typecheck
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          pnpm typecheck > typecheck.log 2>&1
+          status=$?
+          cat typecheck.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit $status
+      - name: Upload typecheck log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: khadimni-typecheck-log
+          path: typecheck.log
+      - name: Fail if typecheck failed
+        if: steps.typecheck.outcome == 'failure'
+        run: exit 1
       - name: Build Khadimni web app
         run: pnpm --filter @workspace/khadimni run build
       - name: Build API server
