@@ -6,11 +6,6 @@ import { toPublicUser } from "../lib/public-user";
 
 const router: IRouter = Router();
 
-function paramString(value: string | string[] | undefined): string | undefined {
-  if (Array.isArray(value)) return value[0];
-  return value;
-}
-
 router.get("/jobs", async (req, res) => {
   const { city, jobType } = req.query as { city?: string; jobType?: string };
   const limit = Math.min(Number(req.query.limit) || 20, 50);
@@ -25,10 +20,16 @@ router.get("/jobs", async (req, res) => {
 });
 
 router.get("/jobs/:id", async (req, res) => {
-  const id = paramString(req.params.id);
-  if (!id) { res.status(400).json({ error: "معرّف الوظيفة غير صالح" }); return; }
+  const rawId = req.params.id;
+  const id: string = Array.isArray(rawId) ? rawId[0] : rawId;
+  if (!id) {
+    res.status(400).json({ error: "معرّف الوظيفة غير صالح" });
+    return;
+  }
+
   const [row] = await db.select({ job: jobsTable, employer: usersTable }).from(jobsTable)
-    .innerJoin(usersTable, eq(jobsTable.employerId, usersTable.id)).where(eq(jobsTable.id, id)).limit(1);
+    .innerJoin(usersTable, eq(jobsTable.employerId, usersTable.id))
+    .where(eq(jobsTable.id, id)).limit(1);
   if (!row) { res.status(404).json({ error: "الوظيفة غير موجودة" }); return; }
   db.update(jobsTable).set({ viewsCount: sql`${jobsTable.viewsCount} + 1` }).where(eq(jobsTable.id, id)).catch(() => {});
   res.json({ job: { ...row.job, employer: toPublicUser(row.employer) } });
@@ -43,9 +44,15 @@ router.post("/jobs", requireAuth, async (req, res) => {
 });
 
 router.patch("/jobs/:id", requireAuth, async (req, res) => {
-  const id = paramString(req.params.id);
-  if (!id) { res.status(400).json({ error: "معرّف الوظيفة غير صالح" }); return; }
-  const [existing] = await db.select({ employerId: jobsTable.employerId }).from(jobsTable).where(eq(jobsTable.id, id)).limit(1);
+  const rawId = req.params.id;
+  const id: string = Array.isArray(rawId) ? rawId[0] : rawId;
+  if (!id) {
+    res.status(400).json({ error: "معرّف الوظيفة غير صالح" });
+    return;
+  }
+
+  const [existing] = await db.select({ employerId: jobsTable.employerId }).from(jobsTable)
+    .where(eq(jobsTable.id, id)).limit(1);
   if (!existing) { res.status(404).json({ error: "الوظيفة غير موجودة" }); return; }
   if (existing.employerId !== req.user!.id) { res.status(403).json({ error: "لا يمكنك تعديل هذا الإعلان" }); return; }
   const parsed = insertJobSchema.partial().safeParse(req.body);
