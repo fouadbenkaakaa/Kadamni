@@ -42,7 +42,13 @@ router.patch("/users/me", requireAuth, async (req, res) => {
     res.status(400).json({ error: "لم يتم إرسال أي تعديل" });
     return;
   }
-  const [user] = await db.update(usersTable).set({ ...data, updatedAt: new Date() }).where(eq(usersTable.id, req.user!.id)).returning();
+  const dbData = {
+    ...data,
+    locationLat: data.locationLat === undefined || data.locationLat === null ? data.locationLat : String(data.locationLat),
+    locationLng: data.locationLng === undefined || data.locationLng === null ? data.locationLng : String(data.locationLng),
+    updatedAt: new Date(),
+  };
+  const [user] = await db.update(usersTable).set(dbData).where(eq(usersTable.id, req.user!.id)).returning();
   if (!user) { res.status(404).json({ error: "المستخدم غير موجود" }); return; }
   res.json({ user: toPublicUser(user) });
 });
