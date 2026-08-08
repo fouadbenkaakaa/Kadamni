@@ -48,10 +48,16 @@
         canvas.width = Math.max(1, Math.round(img.width * scale));
         canvas.height = Math.max(1, Math.round(img.height * scale));
         var ctx = canvas.getContext("2d");
+        if (!ctx) {
+          alert("تعذر تجهيز الصورة");
+          return;
+        }
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         window.__KHADIMNI_PROFILE_AVATAR__ = canvas.toDataURL("image/jpeg", 0.78);
         var preview = document.getElementById("profile-avatar-preview");
         if (preview) preview.innerHTML = '<img src="' + esc(window.__KHADIMNI_PROFILE_AVATAR__) + '" alt="معاينة" style="width:100%;height:100%;border-radius:50%;object-fit:cover" />';
+        var label = document.getElementById("profile-avatar-file-name");
+        if (label) label.textContent = file.name;
       };
       img.onerror = function () { alert("تعذر قراءة الصورة"); };
       img.src = reader.result;
@@ -98,12 +104,14 @@
         '<div style="font-weight:700;font-size:16px;color:var(--text)">تعديل الملف الشخصي</div>' +
       '</div>' +
       '<div style="flex:1;overflow:auto;padding:20px">' +
-        '<div style="display:flex;justify-content:center;margin-bottom:20px">' +
-          '<label for="edit-avatar" style="cursor:pointer;position:relative">' +
+        '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:20px">' +
+          '<label for="edit-avatar" style="cursor:pointer;position:relative" title="اختيار صورة شخصية">' +
             '<div id="profile-avatar-preview" style="width:92px;height:92px;border-radius:50%;overflow:hidden">' + profileAvatar(u, 92) + '</div>' +
             '<span style="position:absolute;right:0;bottom:0;width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center">' + icon("camera", 15, "#fff") + '</span>' +
           '</label>' +
-          '<input id="edit-avatar" type="file" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="prepareProfileAvatar(this)" />' +
+          '<input id="edit-avatar" type="file" accept="image/jpeg,image/png,image/webp" onchange="prepareProfileAvatar(this)" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none" />' +
+          '<label for="edit-avatar" style="display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:150px;height:40px;padding:0 16px;border-radius:12px;background:var(--primary);color:#fff;font-size:12px;font-weight:700;cursor:pointer">' + icon("upload", 15, "#fff") + 'اختيار صورة شخصية</label>' +
+          '<div id="profile-avatar-file-name" style="min-height:16px;font-size:11px;color:var(--sub)">JPG أو PNG أو WebP</div>' +
         '</div>' +
         '<div style="display:flex;flex-direction:column;gap:10px">' +
           profileInput("edit-fullname", "الاسم الكامل", u.fullName || "") +
@@ -145,7 +153,6 @@
           '<div><div style="font-size:11px;color:var(--sub)">المهارات</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">' + (skills.length ? skills.map(function(s){ return '<span style="padding:5px 9px;border-radius:999px;background:var(--primarySofter);font-size:11px;color:var(--text)">' + esc(s) + '</span>'; }).join("") : '<span style="font-size:12px;color:var(--sub)">لا توجد مهارات مضافة</span>') + '</div></div>' +
         '</div>' +
       '</div>' +
-      bottomNav() +
     '</div>';
   };
 
