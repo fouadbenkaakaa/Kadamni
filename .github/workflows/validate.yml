@@ -1,0 +1,29 @@
+name: Validate Khadimni
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+      - name: Install dependencies
+        run: pnpm install --config.strict-dep-builds=false
+      - name: Typecheck workspace
+        run: pnpm typecheck
+      - name: Build Khadimni web app
+        run: pnpm --filter @workspace/khadimni run build
+      - name: Build API server
+        run: pnpm --filter @workspace/api-server run build
