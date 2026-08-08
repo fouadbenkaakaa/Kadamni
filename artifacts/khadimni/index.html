@@ -28,5 +28,14 @@
 <script src="/script.js"></script>
 <script src="/otp.js"></script>
 <script src="/profile-search.js"></script>
+<script>
+  // profile-search.js intentionally exports its overrides on window.
+  // Register those overrides after both scripts have loaded.
+  if (typeof SCREENS !== "undefined") {
+    if (typeof window.screenEditProfile === "function") SCREENS["edit-profile"] = window.screenEditProfile;
+    if (typeof window.screenProfile === "function") SCREENS["profile"] = window.screenProfile;
+    if (typeof window.screenSearch === "function") SCREENS["search"] = window.screenSearch;
+  }
+</script>
 </body>
 </html>
